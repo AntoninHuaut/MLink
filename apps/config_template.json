@@ -1,0 +1,22 @@
+{
+    "port": 3006,
+    "discord": {
+        "token": "",
+        "prefix": "!",
+        "adminId": "",
+        "server": {
+            "<discord server id>": {
+                "roleId": "<role id>"
+            }
+        }
+    },
+    "game": [
+        "minecraft"
+    ],
+    "sql": {
+        "host": "",
+        "database": "",
+        "user": "",
+        "password": ""
+    }
+}
