@@ -37,31 +37,19 @@ function checkOldRole(callback) {
     });
 }
 
-function getRoleById(guildId) {
-    if (!config.discord.server[guildId])
-        return null;
-
-    let roleId = config.discord.server[guildId].roleId;
-    let guild = discord.getClient().guilds.get(guildId);
-
-    if (!guild)
-        return;
-
-    let role = guild.roles.get(roleId);
-
-    return !role ? undefined : role;
-}
-
 function isAllowed(member, guildId) {
     if (!config.discord.server[guildId])
         return true;
+    else if (member.hasPermission("ADMINISTRATOR"))
+        return true;
 
-    let roleId = config.discord.server[guildId].roleId;
+    let roleIdList = config.discord.server[guildId].roleId;
+    let hasRoleList = [];
+    roleIdList.forEach(roleId => hasRoleList.push(member.roles.has(roleId)));
 
-    return (member.roles.has(roleId) || member.hasPermission("ADMINISTRATOR"));
+    return (hasRoleList.some(el => el));
 }
 
-exports.getRoleById = getRoleById;
 exports.checkOldRole = checkOldRole;
 exports.isAllowed = isAllowed;
 exports.startRun = () => {

@@ -26,9 +26,7 @@ client.on('message', async msg => {
 
     if (command == 'link') {
         if (!roleCheck.isAllowed(msg.member, msg.guild.id)) {
-            let role = roleCheck.getRoleById(msg.guild.id);
-            role = !!role ? `, vous devez avoir le grade ${role.name}` : '';
-            msg.channel.send(`:x: Désolé, vous n'avez pas accès au système de link${role}`).catch(err => {});
+            msg.channel.send(`:x: Désolé, vous n'avez pas accès au système de link`).catch(err => {});
             return;
         }
 
