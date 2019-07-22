@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>MLink - Accueil</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{{>css}}
+</head>
+
+<body>
+	{{>header}}
+
+	{{#if message}}
+	<div class="container container-base">
+		<div class="title text">
+			<label>{{message}}</label>
+		</div>
+	</div>
+	{{/if}}
+
+	{{>js}}
+</body>
+
+</html>

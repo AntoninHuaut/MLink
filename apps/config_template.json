@@ -3,16 +3,16 @@
     "discord": {
         "token": "",
         "prefix": "!",
-        "adminId": "",
-        "server": {
-            "<discord server id>": {
-                "roleId": ["<role id>"]
-            }
-        }
+        "adminId": ""
     },
-    "game": [
-        "minecraft"
-    ],
+    "web": {
+        "secret": ""
+    },
+    "oauth2": {
+        "clientID": "",
+        "clientSecret": "",
+        "scope": ["identify", "guilds"]
+    },
     "sql": {
         "host": "",
         "database": "",

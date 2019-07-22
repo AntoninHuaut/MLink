@@ -1,6 +1,8 @@
 # MLink
-Bot Discord permettant à des utilisateurs possédant un rôle ou non, de rentrer leur pseudo pour un jeu  
-Il est possible d'accéder à ces pseudos depuis le serveur web que gère l'application *(Port 3006 par défaut)*   
-L'application gère la suppression des utilisateurs automatiquement s'ils perdent leur rôle  
+Application web permettant de créer des listes de jeux  
+Les utilisateurs peuvent alors se connecter à partir de leur compte Discord  
+Ils pourront entrer leur pseudo pour chaque liste de jeu  
+Les listes de jeux peuvent être réservées à certains rôles  
+Les utilisateurs devront posséder au moins un des rôles spécifiés pour y accéder  
   
-[Démonstration du serveur web](http://maner.fr:3006/ "Démonstration du serveur web")
+[Démonstration](https://mlink.maner.fr/ "Démonstration")

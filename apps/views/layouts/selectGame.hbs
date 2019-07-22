@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>MLink - Liaison</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{{>css}}
+</head>
+
+<body>
+	{{>header}}
+
+	<div class="container container-base w-25">
+		<form action="/link/checkSelectGame" method="post">
+			<div class="title text">
+				<label>Liaison</label>
+			</div>
+
+			<div class="form-group">
+				<select class="form-control" name="gameSelect" id="gameSelect">
+					{{#each gameList}}
+					<option value="{{idGame}}">#{{idGame}} &nbsp; {{guildName}} : {{nameGame}}</option>
+					{{/each}}
+				</select>
+			</div>
+
+			<button type="submit" class="btn btn-primary form-btn">Continuer</button>
+		</form>
+	</div>
+
+	{{>js}}
+</body>
+
+</html>

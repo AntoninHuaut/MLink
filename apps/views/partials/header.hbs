@@ -1,0 +1,14 @@
+<nav class="navbar navbar-dark bg-dark">
+    <div class="navbar-expand-lg">
+        {{#if user}}
+        <a class="navbar-brand" href="/link">Gérer les liaisons</a>
+        <a class="navbar-brand" href="/game">Gérer les jeux</a>
+        {{/if}}
+    </div>
+
+    {{#if user}}
+    <a class="navbar-brand" href="/logout">Déconnexion</a>
+    {{else}}
+    <a class="navbar-brand" href="/login">Connexion</a>
+    {{/if}}
+</nav>

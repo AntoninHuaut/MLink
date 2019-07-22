@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>MLink - Liaison</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{{>css}}
+</head>
+
+<body>
+	{{>header}}
+
+	<div id="notif" style="text-align: center;" class="container w-25"></div>
+
+	<div class="container container-base w-25">
+		<form id="formSelectPseudo">
+			<div class="text">
+				<div style="font-size: 24px;" class="subTitle">
+					<label>Serveur : {{guildName}}</label>
+					<br /><label>Jeu : {{nameGame}}</label>
+				</div>
+
+				<div class="subTitle">
+					<label>Pseudo actuel : <span id="pseudoActuel">
+							{{#if pseudo}}{{pseudo}}
+							{{else}}Aucun pseudo enregistré
+							{{/if}}</span>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<input type="text" name="newPseudo" class="form-control" id="newPseudo" placeholder="Nouveau pseudo">
+			</div>
+		</form>
+
+		<button id="submit" class="btn btn-primary form-btn">Continuer</button>
+	</div>
+
+	{{>js}}
+	<script>
+		checkSubmit();
+		$("#newPseudo").on('input', checkSubmit);
+
+		function checkSubmit() {
+			$("#submit").attr("disabled", $("#newPseudo").val().trim() == '');
+		}
+
+		$("#submit").on('click', () => {
+			let newPseudo = $("#newPseudo").val().trim();
+
+			fetch("/link/checkSelectPseudo", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					newPseudo: newPseudo
+				})
+			}).then(response => response.json()).then(response => {
+				let status = parseInt(response.status);
+				let notifEl = $("#notif");
+				let classRes = status == 200 ? "success" : "danger";
+				let msgRes;
+
+				if (status == 200) {
+					$("#pseudoActuel").text(newPseudo);
+					$("#newPseudo").val("");
+					checkSubmit();
+					msgRes = "Votre pseudo a été édité avec succès";
+				}
+				else if (status == 400)
+					msgRes = "Le pseudo entré est incorrect";
+				else if (status == 500)
+					msgRes = "Votre pseudo n'a pas pu être édité (Problème serveur)";
+				else
+					msgRes = "Votre pseudo n'a pas pu être édité (Erreur inconnue)"
+
+				notifEl.html(`<div class="alert alert-${classRes}" role="alert">${msgRes}</div>`);
+				setTimeout(() => notifEl.hide(), 5000);
+			});
+		});
+	</script>
+</body>
+
+</html>
