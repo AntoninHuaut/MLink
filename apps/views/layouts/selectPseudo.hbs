@@ -70,6 +70,8 @@
 				}
 				else if (status == 400)
 					msgRes = "Le pseudo entré est incorrect";
+				else if (status == 403)
+					msgRes = "Votre pseudo n'a pas pu être édité (Vous n'avez pas la permission)";
 				else if (status == 500)
 					msgRes = "Votre pseudo n'a pas pu être édité (Problème serveur)";
 				else

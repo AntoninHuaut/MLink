@@ -12,7 +12,7 @@ client.on('message', async msg => {
     let args = msg.content.slice(config.discord.prefix.length).trim().split(/ +/g);
     let command = args.shift().toLowerCase();
 
-    if (command == "refresh" && msg.author.id == config.discord.adminId)
+    if (command == "refresh" && isBotOwner(msg))
         return control.checkOldRole().then(() => {
             msg.channel.send(":white_check_mark: Le refresh a été forcé").catch(err => {});
         });
@@ -28,10 +28,23 @@ client.on('message', async msg => {
             .addField("Gérer vos liaison", "Sur https://mlink.maner.fr/");
 
         msg.channel.send(embed).catch(err => {});
+    } else if (command == 'listid' && msg.member.hasPermission("MANAGE_GUILD")) {
+        let message = ":black_circle: ID Rôles :black_circle:\n";
+        let roles = msg.guild.roles.array();
+
+        roles.forEach(el => message += ` • ${el.name.replace('@', '')} - ${el.id}\n`);
+
+        msg.channel.send(message, {
+            split: true
+        }).catch(err => {});
     }
 });
 
 client.login(config.discord.token).catch(err => {});
+
+function isBotOwner(msg) {
+    return msg.author.id == config.discord.adminId
+}
 
 exports.getClient = () => {
     return client;
