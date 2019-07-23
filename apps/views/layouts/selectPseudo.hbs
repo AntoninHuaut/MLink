@@ -76,6 +76,7 @@
 					msgRes = "Votre pseudo n'a pas pu être édité (Erreur inconnue)"
 
 				notifEl.html(`<div class="alert alert-${classRes}" role="alert">${msgRes}</div>`);
+				notifEl.show();
 				setTimeout(() => notifEl.hide(), 5000);
 			});
 		});

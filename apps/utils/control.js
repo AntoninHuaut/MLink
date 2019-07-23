@@ -69,7 +69,7 @@ exports.canGamesAccess = (userId, guildId, roleId) => {
     let member = guild.member(userId);
     if (!member) return false;
     if (member.hasPermission("MANAGE_GUILD")) return true;
-    if (!Arrays.isArray(roleId) || !roleId[0]) return true;
+    if (!Array.isArray(roleId) || !roleId[0]) return true;
 
     let hasRoleList = [];
     roleId.forEach(roleId => hasRoleList.push(member.roles.has(roleId)));
