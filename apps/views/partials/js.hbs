@@ -1,3 +1,16 @@
 <script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/detectmobilebrowser.js"></script>
+<script>
+    refresh();
+
+    function refresh() {
+        let container = [$(".container")];
+        if (!container) return;
+
+        if (!jQuery.browser.mobile)
+            container.forEach(el => el.addClass("w-25"));
+    }
+</script>
+
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/bootbox.all.min.js"></script>

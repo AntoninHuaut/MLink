@@ -7,8 +7,18 @@
     </div>
 
     {{#if user}}
-    <a class="navbar-brand" href="/logout">Déconnexion</a>
-    {{else}}
-    <a class="navbar-brand" href="/login">Connexion</a>
+    <div>
+        <img height="48" src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}.png?size=64"
+            class="rounded-circle img-responsive" />
+        <span class="navbar-brand">&nbsp;{{user.username}}#{{user.discriminator}}</span>
+    </div>
     {{/if}}
+
+    <div>
+        {{#if user}}
+        <a class="navbar-brand" href="/logout">Déconnexion</a>
+        {{else}}
+        <a class="navbar-brand" href="/login">Connexion</a>
+        {{/if}}
+    </div>
 </nav>

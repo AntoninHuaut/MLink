@@ -3,36 +3,30 @@ const discord = require('./../discord');
 
 exports.checkOldRole = () => {
     return new Promise((resolve, reject) => {
-        sql.getAllUsers(result => {
-            let nbDelete = 0;
+        sql.getAllLink([])
+            .catch(err => {})
+            .then(result => {
+                if (!result || discord.getClient().status != 0)
+                    return;
 
-            for (let i = 0; i < result.length; i++) {
-                let idUser = result[i].idUser;
-                let idServer = result[i].idServer;
-                let guild = discord.getClient().guilds.get(idServer);
-                let remove = false;
+                let removeLink = [];
 
-                if (!guild)
-                    remove = true;
-                else {
-                    let member = guild.members.get(idUser);
+                result.forEach(el => {
+                    if (!this.canGamesAccess(el.userId, el.guildId, el.roleId))
+                        removeLink.push(el);
+                });
 
-                    if (!member || !isAllowed(member, idServer))
-                        remove = true;
-                }
+                let con = sql.getConnection();
 
-                if (remove)
-                    sql.deletePseudoUser(idUser, idServer, null, () => {
-                        nbDelete++;
-                    });
-            }
+                removeLink.forEach(el => {
+                    con.query("delete from link where idGame = ? and userId = ?", [el.idGame, el.userId], (err, result) => {});
+                });
 
-            if (nbDelete > 0)
-                console.log(nbDelete + " user(s) deleted");
-
-            sql.refreshSponsorList();
-            resolve();
-        });
+                con.end(err => {
+                    if (err) reject(err);
+                    resolve();
+                })
+            });
     });
 }
 
@@ -70,12 +64,12 @@ exports.getGamesAccess = (profile) => {
 
 exports.canGamesAccess = (userId, guildId, roleId) => {
     let guild = discord.getClient().guilds.get(guildId);
-    if (!guild) return false;
+    if (!guild) return true;
 
     let member = guild.member(userId);
     if (!member) return false;
     if (member.hasPermission("MANAGE_GUILD")) return true;
-    if (!roleId[0]) return true;
+    if (!Arrays.isArray(roleId) || !roleId[0]) return true;
 
     let hasRoleList = [];
     roleId.forEach(roleId => hasRoleList.push(member.roles.has(roleId)));

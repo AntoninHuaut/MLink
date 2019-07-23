@@ -4,10 +4,15 @@ const control = require('../utils/control');
 
 exports.selectGame = async function (req, res) {
     let gameList = await control.getGamesAccess(req.session.user);
-    res.render('selectGame', {
+    let opt = {
         user: req.session.user,
         gameList: gameList
-    });
+    };
+
+    if (gameList.length == 0)
+        delete opt.gameList;
+
+    res.render('selectGame', opt);
 }
 
 exports.selectPseudo = async function (req, res) {
@@ -17,7 +22,7 @@ exports.selectPseudo = async function (req, res) {
     if (!infoGame)
         return res.redirect('/link');
 
-    let canAccess = control.canGamesAccess(req.session.user.id, infoGame.guildId, infoGame.roleId);
+    let canAccess = control.canGamesAccess(req.session.user.id, infoGame.guildId, infoGame.roleId ? infoGame.roleId.split(',') : []);
     let guildName = discord.getClient().guilds.get(infoGame.guildId).name;
 
     if (!canAccess)

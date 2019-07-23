@@ -8,6 +8,10 @@
     src: url('../fonts/ubuntu/Ubuntu-Bold.ttf');
 }
 
+.navbar-brand {
+    vertical-align: middle;
+}
+
 .container-base {
     padding-top: 65px;
 }
