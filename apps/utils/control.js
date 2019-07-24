@@ -1,33 +1,41 @@
 const sql = require('./sql');
 const discord = require('./../discord');
 
-exports.checkOldRole = () => {
+exports.getManagedGames = (managedGuilds) => {
     return new Promise((resolve, reject) => {
-        sql.getAllLink([])
-            .catch(err => {})
-            .then(result => {
-                if (!result || discord.getClient().status != 0)
-                    return;
-
-                let removeLink = [];
-
-                result.forEach(el => {
-                    if (!this.canGamesAccess(el.userId, el.guildId, el.roleId))
-                        removeLink.push(el);
+        sql.getManagedGames(managedGuilds).catch(err => reject(err))
+            .then(manageGames => {
+                manageGames.forEach((game, index, array) => {
+                    game.guildName = discord.getClient().guilds.get(game.guildId).name;
+                    array[index] = game;
                 });
-
-                let con = sql.getConnection();
-
-                removeLink.forEach(el => {
-                    con.query("delete from link where idGame = ? and userId = ?", [el.idGame, el.userId], (err, result) => {});
-                });
-
-                con.end(err => {
-                    if (err) reject(err);
-                    resolve();
-                })
+                resolve(manageGames);
             });
     });
+};
+
+exports.getServerUserManage = (profile) => {
+    let userId = profile.id;
+    let managedGuild = [];
+
+    profile.guilds.forEach(guild => {
+        if (this.isUserManageGuild(userId, guild.id))
+            managedGuild.push({
+                guildId: guild.id,
+                guildName: guild.name
+            })
+    });
+
+    return managedGuild;
+}
+
+exports.isUserManageGuild = (userId, guildId) => {
+    let guild = discord.getClient().guilds.get(guildId);
+    if (!guild) return false;
+
+    let member = guild.member(userId);
+    if (!member) return false;
+    return (member.hasPermission("MANAGE_GUILD"));
 }
 
 exports.getGamesOnServer = (profile) => {
@@ -80,4 +88,33 @@ exports.canGamesAccess = (userId, guildId, roleId) => {
     roleId.forEach(roleId => hasRoleList.push(member.roles.has(roleId)));
 
     return hasRoleList.some(el => el);
+}
+
+exports.checkOldRole = () => {
+    return new Promise((resolve, reject) => {
+        sql.getAllLink([])
+            .catch(err => {})
+            .then(result => {
+                if (!result || discord.getClient().status != 0)
+                    return;
+
+                let removeLink = [];
+
+                result.forEach(el => {
+                    if (!this.canGamesAccess(el.userId, el.guildId, el.roleId))
+                        removeLink.push(el);
+                });
+
+                let con = sql.getConnection();
+
+                removeLink.forEach(el => {
+                    con.query("delete from link where idGame = ? and userId = ?", [el.idGame, el.userId], (err, result) => {});
+                });
+
+                con.end(err => {
+                    if (err) reject(err);
+                    resolve();
+                })
+            });
+    });
 }

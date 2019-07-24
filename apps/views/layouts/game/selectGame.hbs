@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>MLink - Gestion Jeux</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{>css}}
+</head>
+
+<body>
+    {{>header}}
+
+    <div class="container container-base w-25">
+        <form action="/game/checkSelectGame" method="post">
+            <div class="title text">
+                <label>Gestion des jeux</label>
+            </div>
+
+            {{#if manageGames}}
+            <div class="form-group">
+                <select class="form-control" name="gameSelect" id="gameSelect">
+                    {{#each manageGames}}
+                    <option value="{{idGame}}">#{{idGame}} &nbsp; {{guildName}} : {{nameGame}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary form-btn">Continuer</button>
+            {{else}}
+            <div class="subTitle text">
+                <label>Vous ne possédez aucun jeux
+                    <br />Assurez-vous que vous avez la permission de gérer le serveur</label>
+            </div>
+            {{/if}}
+        </form>
+    </div>
+
+    {{>js}}
+</body>
+
+</html>

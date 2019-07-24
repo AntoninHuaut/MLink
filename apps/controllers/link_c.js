@@ -12,7 +12,7 @@ exports.selectGame = async function (req, res) {
     if (gameList.length == 0)
         delete opt.gameList;
 
-    res.render('selectGame', opt);
+    res.render('link/selectGame', opt);
 }
 
 exports.checkSelectGame = async function (req, res) {
@@ -44,7 +44,7 @@ exports.selectPseudo = async function (req, res) {
     if (pseudo)
         opt.pseudo = pseudo;
 
-    res.render('selectPseudo', opt);
+    res.render('link/selectPseudo', opt);
 }
 
 exports.checkSelectPseudo = async function (req, res) {

@@ -11,13 +11,20 @@ router.get("/", (req, res) => res.redirect('/link/selectGame'));
 router.get("/selectGame", controller.selectGame);
 router.post("/checkSelectGame", urlencodedParser, controller.checkSelectGame);
 
-router.use(async (req, res, next) => {
+router.use((req, res, next) => {
     let gameSelect = req.session.user.gameSelect;
-    let infoGame = (await sql.getInfoGame(gameSelect).catch(err => {}))[0];
-    let canAccess = control.canGamesAccess(req.session.user.id, infoGame.guildId, infoGame.roleId);
-    req.session.user.canAccess = canAccess;
-    req.session.user.infoGame = infoGame;
-    next();
+    sql.getInfoGame(gameSelect)
+        .catch(err => res.render('home', {
+            user: req.session.user,
+            message: "Une erreur est survenue"
+        }))
+        .then(infoGame => {
+            infoGame = infoGame[0];
+            let canAccess = control.canGamesAccess(req.session.user.id, infoGame.guildId, infoGame.roleId);
+            req.session.user.canAccess = canAccess;
+            req.session.user.infoGame = infoGame;
+            next();
+        });
 });
 
 router.get("/selectPseudo", controller.selectPseudo);

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>MLink - Gestion Jeux</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{{>css}}
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<style>
+		.toggle-handle {
+			background-color: white;
+		}
+	</style>
+</head>
+
+<body>
+	{{>header}}
+
+	<div id="notif" style="text-align: center;" class="container w-25"></div>
+
+	<div id="formCreateGame" class="container container-base w-25">
+		<form>
+			<div class="title text">
+				<label>Gestion des jeux</label>
+			</div>
+
+			{{#if managedGuilds}}
+			<div class="form-group">
+				<select class="form-control" name="serverSelect" id="serverSelect">
+					{{#each managedGuilds}}
+					<option value="{{guildId}}">{{guildName}}</option>
+					{{/each}}
+				</select>
+			</div>
+
+			<div class="form-group">
+				<input type="text" name="gameName" class="form-control" id="gameName" placeholder="Nom du jeu">
+			</div>
+
+			<div class="row">
+				<div class="col-sm">
+					<input name="roleOnly" id="roleOnly" type="checkbox" data-toggle="toggle" data-onstyle="success"
+						data-offstyle="danger" data-on="<i class='fas fa-check'></i> Rôles &nbsp;"
+						data-off="<i class='fas fa-times'></i> Rôles" />
+				</div>
+				<div id="divIdRoles" class="col-8">
+					<div class="form-group">
+						<input type="idRoles" name="idRoles" class="form-control" id="idRoles"
+							placeholder="ID des rôles">
+						<label>Séparer les par une virgule</label>
+					</div>
+				</div>
+			</div>
+
+			{{else}}
+			<div class="subTitle text">
+				<label>Vous ne gérez aucun serveur</label>
+			</div>
+			{{/if}}
+		</form>
+
+		{{#if managedGuilds}}
+		<button id="submit" class="btn btn-primary form-btn">Continuer</button>
+		{{/if}}
+	</div>
+
+	{{>js}}
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+	<script>
+		$('#roleOnly').change(function () {
+			setRole($(this).prop('checked'));
+		});
+
+		function setRole(etat) {
+			$("#divIdRoles").toggle(etat);
+			$('#roleOnly').bootstrapToggle(etat ? 'on' : 'off');
+		}
+
+		setRole(false);
+	</script>
+
+	<script>
+		checkSubmit();
+		$("#gameName").on('input', checkSubmit);
+
+		function checkSubmit() {
+			$("#submit").attr("disabled", $("#gameName").val().trim() == '');
+		}
+
+		$("#submit").on('click', () => {
+			fetch("/game/checkEditGame", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					serverSelect: $("#serverSelect").val(),
+					gameName: $("#gameName").val().trim(),
+					roleOnly: $("#roleOnly").val(),
+					idRoles: $("#idRoles").val().trim()
+				})
+			}).then(response => response.json()).then(response => {
+				console.log(response)
+				let status = parseInt(response.status);
+				let notifEl = $("#notif");
+				let classRes = status == 200 ? "success" : "danger";
+				let msgRes;
+
+				if (status == 200) {
+					$("#gameName").val("");
+					$("#formCreateGame").remove();
+					msgRes = "Le jeu a été crée/édité avec succès !";
+				}
+				else if (status == 403)
+					msgRes = "Le jeu n'a pas pu être crée/édité (Vous n'avez pas la permission)";
+				else if (status == 429)
+					msgRes = "Le jeu n'a pas pu être crée/édité (Too many requests)";
+				else if (status == 500)
+					msgRes = "Le jeu n'a pas pu être crée/édité (Problème serveur)";
+				else
+					msgRes = "Le jeu n'a pas pu être crée/édité (Erreur inconnue)"
+
+				notifEl.html(`<div class="alert alert-${classRes}" role="alert">${msgRes}</div>`);
+				notifEl.show();
+				setTimeout(() => {
+					notifEl.hide();
+					window.location = "/game";
+				}, 5000);
+			});
+		});
+	</script>
+</body>
+
+</html>

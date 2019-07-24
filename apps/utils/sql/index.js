@@ -56,9 +56,14 @@ exports.getAllLink = getAllLink;
 exports.getConnection = getConnection;
 
 const gameSQL = require('./game');
+exports.getManagedGames = gameSQL.getManagedGames;
+exports.updateGame = gameSQL.updateGame;
 exports.getGames = gameSQL.getGames;
 exports.getInfoGame = gameSQL.getInfoGame;
 
 const linkSQL = require('./link');
 exports.getPseudo = linkSQL.getPseudo;
 exports.updatePseudo = linkSQL.updatePseudo;
+
+const usersManageSQL = require('./usersManage');
+exports.isUserCanManage = usersManageSQL.isUserCanManage;

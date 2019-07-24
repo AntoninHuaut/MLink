@@ -1,0 +1,52 @@
+<!-- WIP -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>MTube - Gestion Jeux</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{>css}}
+</head>
+
+<body>
+    {{>header}}
+
+    <div id="notif" style="text-align: center;" class="container w-25"></div>
+
+    <div class="container w-50" style="margin-top: 5%;">
+        <div class="title text">
+            <label>Gestion des jeux</label>
+        </div>
+
+        <div class="row">
+            <div class="col-sm">
+                <a href="/game/createGame">
+                    <button class="btn btn-primary form-btn">
+                        Créer un jeu
+                    </button>
+                </a>
+            </div>
+            <div class="col-sm">
+                <a href="/game/selectGame?callback=/game/editGame">
+                    <button class="btn btn-primary form-btn">
+                        Editer un jeu
+                    </button>
+                </a>
+            </div>
+            <div class="col-sm">
+                <a href="/game/selectGame?callback=/game/removeGame">
+                    <button class="btn btn-primary form-btn">
+                        Supprimer un jeu
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {{>js}}
+
+</body>
+
+</html>
