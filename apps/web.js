@@ -3,6 +3,7 @@ const hbs = require('hbs');
 const web = require("express")();
 const bodyParser = require("body-parser");
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const config = require("./config.json");
 
 global.__basedir = __dirname;
@@ -25,13 +26,15 @@ var cookieData = {
     path: '/',
     httpOnly: true,
     secure: false,
-    maxAge: null
+    maxAge: 12 * 60 * 60 * 1000
 };
 
 if (process.env.NODE_ENV === 'production') {
     web.set('trust proxy', 1);
     cookieData.secure = true;
 }
+
+var sessionStore = new MySQLStore(require('./utils/sql').getOptions());
 
 web.use(session({
     genid: () => {
@@ -40,6 +43,7 @@ web.use(session({
     secret: config.web.secret,
     name: "mlink_session",
     saveUninitialized: false,
+    store: sessionStore,
     resave: true,
     proxy: true,
     cookie: cookieData

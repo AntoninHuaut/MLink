@@ -12,8 +12,10 @@ const DiscordStrategy = new _strategy({
     callbackURL: process.env.CALLBACK_URL,
     scope: config.oauth2.scope
 }, function (accesstoken, refreshToken, profile, done) {
+    profile.accesstoken = accesstoken;
+    profile.refreshToken = refreshToken;
     return done(null, profile);
 });
 
-passport.use(DiscordStrategy);
-refresh.use(DiscordStrategy);
+passport.use('discord', DiscordStrategy);
+refresh.use('discord', DiscordStrategy);

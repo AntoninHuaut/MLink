@@ -13,6 +13,9 @@ router.post("/checkSelectGame", urlencodedParser, controller.checkSelectGame);
 
 router.use((req, res, next) => {
     let gameSelect = req.session.user.gameSelect;
+    if (!gameSelect)
+        return;
+
     sql.getInfoGame(gameSelect)
         .catch(err => res.render('home', {
             user: req.session.user,

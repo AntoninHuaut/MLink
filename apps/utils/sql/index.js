@@ -8,14 +8,14 @@ function initTable() {
         input: fs.createReadStream('./apps/utils/sql/table.sql'),
         terminal: false
     });
-    let con = getConnection();
+    let con = this.getConnection();
     rl.on('line', chunk => con.query(chunk.toString('utf-8'), (err) => {}));
     rl.on('close', () => con.end());
 }
 
 function getAllLink(idGames) {
     return new Promise((resolve, reject) => {
-        let con = getConnection();
+        let con = this.getConnection();
         let idGamesSQL = ` where idGame in (`;
 
         idGames.forEach(el => {
@@ -40,20 +40,22 @@ function getAllLink(idGames) {
     });
 }
 
-function getConnection() {
-    let con = mysql.createConnection({
+exports.getOptions = () => {
+    return {
         host: config.sql.host,
+        port: config.sql.port,
         user: config.sql.user,
         password: config.sql.password,
         database: config.sql.database
-    });
-    con.connect();
-    return con;
+    };
 }
-
 exports.initTable = initTable;
 exports.getAllLink = getAllLink;
-exports.getConnection = getConnection;
+exports.getConnection = () => {
+    let con = mysql.createConnection(this.getOptions());
+    con.connect();
+    return con;
+};
 
 const gameSQL = require('./game');
 exports.getManagedGames = gameSQL.getManagedGames;
