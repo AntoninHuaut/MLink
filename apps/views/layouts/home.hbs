@@ -19,6 +19,15 @@
 	</div>
 	{{/if}}
 
+	{{#if user}}
+	{{else}}
+	<div class="container container-base w-50">
+		<div class="title text">
+			<label>Vous n'êtes pas connecté</label>
+		</div>
+	</div>
+	{{/if}}
+
 	{{>js}}
 </body>
 
