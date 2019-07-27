@@ -20,8 +20,15 @@ router.use("/", baseLimiter, require("./base"));
 router.use("/api", apiLimiter, require("./api"));
 router.use("/login", baseLimiter, require("./login"));
 
-router.use("/game", baseLimiter, passport.authenticate('discord'), require("./game"));
-router.use("/link", baseLimiter, passport.authenticate('discord'), require("./link"));
-router.use("/logout", baseLimiter, passport.authenticate('discord'), (req, res) => req.session.destroy((err) => res.redirect('/')));
+router.use((req, res, next) => {
+    if (!req.session.user)
+        return res.redirect("/login");
+
+    next();
+});
+
+router.use("/game", baseLimiter, require("./game"));
+router.use("/link", baseLimiter, require("./link"));
+router.use("/logout", baseLimiter, (req, res) => req.session.destroy((err) => res.redirect('/')));
 
 module.exports = router;
