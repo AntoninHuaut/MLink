@@ -19,6 +19,7 @@ router.use(express.static('apps/static'));
 router.use("/", baseLimiter, require("./base"));
 router.use("/api", apiLimiter, require("./api"));
 router.use("/login", baseLimiter, require("./login"));
+router.use("/faq", baseLimiter, require("./faq"));
 
 router.use((req, res, next) => {
     if (!req.session.user)

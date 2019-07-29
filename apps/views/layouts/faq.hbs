@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>MLink - FAQ</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{{>css}}
+	<link href="/css/faq.css" rel="stylesheet">
+</head>
+
+<body>
+	{{>header}}
+
+	<div class="container container-base">
+		<h3 class="blue" style="margin-top: 0px;">C'est quoi MLink ?</h3>
+		<div>
+			C'est un système vous permettant d'indiquer votre pseudo pour un jeu.
+			<br />Chaque jeu est lié à un serveur Discord. Ce serveur peut y contrôler l'accès suivant des rôles
+			Discord prédéfinis.
+		</div>
+
+		<h3 class="blue">Comment lier son pseudo à un jeu ?</h3>
+		<div>
+			<ol style="list-style-type: upper-roman;">
+				<li>Connectez-vous avec votre compte Discord <span class="infos">(Permet de détecter vos
+						serveurs)</span></li>
+				<li>Rendez-vous dans "<a href="/link">Gérer les liaisons</a>"</li>
+				<div class="infos">
+					<label>Si aucun serveur ne s'affiche :</label>
+					<ul>
+						<li style="margin-top: -10px;">SOIT Vous n'avez pas le/les rôles nécessaires</li>
+						<li>OU Vous n'êtes pas présent sur les serveurs qui utilisent ce système</li>
+					</ul>
+				</div>
+				<li>Sélectionnez le jeu souhaité</li>
+				<li>Entrez votre pseudo et n'oubliez pas d'enregistrer</li>
+			</ol>
+		</div>
+
+		<h3 class="blue">Récupérer la liste des pseudos</h3>
+		<div>
+			API : <a href="/api?id=[]">/api?id=[]</a>
+			<br />Vous aurez besoin des numéros des jeux que vous souhaitez récupérer.
+			<br />Ils sont précédés par le symbole <span class="blue">#</span> dans l'affichage de la liste des
+			jeux.
+			<br />Le tableau représente la liste des numéros de jeux que vous souhaitez récupérer
+			<span class="infos">(Tableau vide = tous les jeux)</span>
+		</div>
+	</div>
+
+	{{>js}}
+</body>
+
+</html>
