@@ -13,8 +13,8 @@ router.post("/checkSelectGame", urlencodedParser, controller.checkSelectGame);
 
 router.use(async (req, res, next) => {
     let gameSelect = req.session.user.gameSelect;
-    let infoGame = await (sql.getInfoGame(gameSelect).catch(err => {}))[0];
-
+    let infoGame = (await sql.getInfoGame(gameSelect).catch(err => {}))[0];
+    
     if (!infoGame)
         return res.redirect('/link');
 
