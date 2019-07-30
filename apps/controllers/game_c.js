@@ -76,6 +76,29 @@ exports.checkEditGame = async function (req, res) {
         });
 }
 
+exports.removeGame = async function (req, res) {
+    if (!req.session.user.canManage || !req.session.user.infoGame)
+        return res.redirect('/game');
+
+    let infoGame = req.session.user.infoGame;
+    infoGame.guildName = control.getGuildName(infoGame.guildId);
+
+    res.render('game/removeGame', {
+        user: req.session.user,
+        infoGame: req.session.user.infoGame
+    });
+}
+
+exports.checkRemoveGame = async function (req, res) {
+    if (!req.session.user.canManage || !req.session.user.infoGame)
+        return res.send(getStatus(res, 403));
+
+    let gameSelect = req.session.user.gameSelect;
+    sql.deleteGame(gameSelect)
+    .catch(err => res.send(getStatus(res, 500)))
+    .then(result => res.send(getStatus(res, 200)));
+}
+
 function getStatus(res, code) {
     res.status(code);
 

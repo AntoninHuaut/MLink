@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>MLink - Gestion Jeux</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{>css}}
+</head>
+
+<body>
+    {{>header}}
+
+    <div id="notif" style="text-align: center;" class="container w-25"></div>
+
+    <div class="container container-base w-25">
+        <form>
+            <div class="title text">
+                <label>Gestion des jeux</label>
+            </div>
+
+            <div class="title text">
+                <label>#{{infoGame.idGame}} &nbsp; {{infoGame.guildName}} : {{infoGame.nameGame}}</label>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-sm">
+                <a href="/game">
+                    <button class="btn btn-primary form-btn">
+                        Retour
+                    </button>
+                </a>
+            </div>
+            <div id="submitDiv" class="col-sm">
+                <button id="submit" class="btn btn-primary form-btn">
+                    Supprimer le jeu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{>js}}
+    <script>
+        $("#submit").on('click', () => {
+            fetch("/game/checkRemoveGame", {
+                method: "POST"
+            }).then(response => response.json()).then(response => {
+                let status = parseInt(response.status);
+                let notifEl = $("#notif");
+                let classRes = status == 200 ? "success" : "danger";
+                let msgRes;
+
+                if (status == 200) {
+                    $("#submitDiv").remove();
+                    msgRes = "Le jeu a été supprimé avec succès";
+                }
+                else if (status == 403)
+                    msgRes = "Le jeu n'a pas pu être supprimé (Vous n'avez pas la permission)";
+                else if (status == 500)
+                    msgRes = "Le jeu n'a pas pu être supprimé (Problème serveur)";
+                else
+                    msgRes = "Le jeu n'a pas pu être supprimé (Erreur inconnue)"
+
+                notifEl.html(`<div class="alert alert-${classRes}" role="alert">${msgRes}</div>`);
+                notifEl.show();
+                setTimeout(() => notifEl.hide(), 5000);
+            });
+        });
+    </script>
+</body>
+
+</html>

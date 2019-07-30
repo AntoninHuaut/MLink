@@ -1,6 +1,6 @@
-const config = require('../config.json');
+const config = require('./config.json');
 const DiscordJS = require('discord.js');
-const control = require('../utils/control');
+const control = require('./utils/control');
 
 let client = new DiscordJS.Client();
 

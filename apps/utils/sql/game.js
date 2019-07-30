@@ -4,7 +4,7 @@ exports.getManagedGames = (managedGuilds) => {
     return new Promise((resolve, reject) => {
         if (!Array.isArray(managedGuilds) || !managedGuilds || managedGuilds.length == 0 || !managedGuilds[0])
             return reject("Paramètre incorrect");
-            
+
         let con = sql.getConnection();
 
         let rqGuildId = "(";
@@ -40,6 +40,18 @@ exports.updateGame = (guildId, nameGame, creatorId, roleId) => {
         con.query("INSERT INTO game (guildId, nameGame, creatorId, roleId) VALUES(?, ?, ?, ?)" +
             " ON DUPLICATE KEY UPDATE nameGame = VALUES(nameGame), roleId = VALUES(roleId)",
             [guildId, nameGame, creatorId, roleId], (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        con.end();
+    });
+}
+
+exports.deleteGame = (idGame) => {
+    return new Promise((resolve, reject) => {
+        let con = sql.getConnection();
+        con.query("DELETE FROM game WHERE idGame = ?",
+            [idGame], (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
             });

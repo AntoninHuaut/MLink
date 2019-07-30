@@ -62,6 +62,7 @@ exports.getManagedGames = gameSQL.getManagedGames;
 exports.updateGame = gameSQL.updateGame;
 exports.getGames = gameSQL.getGames;
 exports.getInfoGame = gameSQL.getInfoGame;
+exports.deleteGame = gameSQL.deleteGame;
 
 const linkSQL = require('./link');
 exports.getPseudo = linkSQL.getPseudo;

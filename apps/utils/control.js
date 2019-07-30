@@ -6,7 +6,7 @@ exports.getManagedGames = (managedGuilds) => {
         sql.getManagedGames(managedGuilds).catch(err => reject(err))
             .then(manageGames => {
                 manageGames.forEach((game, index, array) => {
-                    game.guildName = discord.getClient().guilds.get(game.guildId).name;
+                    game.guildName = this.getGuildName(game.guildId);
                     array[index] = game;
                 });
                 resolve(manageGames);
@@ -62,7 +62,7 @@ exports.getGamesAccess = (profile) => {
         this.getGamesOnServer(profile).catch(err => reject(err)).then(gamesOnServer => {
             gamesOnServer = gamesOnServer.filter(game => this.canGamesAccess(profile.id, game.guildId, game.roleId));
             gamesOnServer.forEach((game, index, array) => {
-                game.guildName = discord.getClient().guilds.get(game.guildId).name;
+                game.guildName = this.getGuildName(game.guildId);
                 array[index] = game;
             });
             resolve(gamesOnServer);
@@ -88,6 +88,10 @@ exports.canGamesAccess = (userId, guildId, roleId) => {
     roleId.forEach(roleId => hasRoleList.push(member.roles.has(roleId)));
 
     return hasRoleList.some(el => el);
+}
+
+exports.getGuildName = (guildId) => {
+    return discord.getClient().guilds.get(guildId).name;
 }
 
 exports.checkOldRole = () => {

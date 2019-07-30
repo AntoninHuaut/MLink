@@ -2,6 +2,7 @@ const indexRoute = require("./index");
 const sql = require("../utils/sql");
 const router = require("express").Router();
 const controller = require("../controllers/game_c");
+const control = require('../utils/control');
 const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({
     extended: true
@@ -25,5 +26,21 @@ router.post("/checkEditGame", urlencodedParser, indexRoute.getLimiter(5000, 1, 4
 
 router.get("/createGame", controller.createGame);
 router.post("/checkSelectGame", urlencodedParser, controller.checkSelectGame);
+
+router.use(async (req, res, next) => {
+    let gameSelect = req.session.user.gameSelect;
+    let infoGame = (await sql.getInfoGame(gameSelect).catch(err => {}))[0];
+
+    if (!infoGame)
+        return res.redirect('/game');
+
+    let canManage = control.isUserManageGuild(req.session.user.id, infoGame.guildId);
+    req.session.user.canManage = canManage;
+    req.session.user.infoGame = infoGame;
+    next();
+});
+
+router.get("/removeGame", controller.removeGame);
+router.post("/checkRemoveGame", urlencodedParser, controller.checkRemoveGame);
 
 module.exports = router;
