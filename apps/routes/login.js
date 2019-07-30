@@ -1,18 +1,8 @@
 const router = require("express").Router();
-const passport = require('passport');
+const oauth = require('../utils/oauth');
 
-router.get("/", passport.authenticate('discord'));
-router.get("/callback", passport.authenticate('discord', {
-    failureRedirect: '/'
-}), function (req, res) {
-    req.session.user = req.user;
-    res.redirect('/');
-}, function (err, req, res, next) {
-    if (err)
-        res.render('home', {
-            message: "Code incorrect, veuillez réessayer",
-            user: req.session.user
-        });
-});
+router.get("/", oauth.auth);
+router.get("/callback", oauth.token);
+router.get("/refresh", oauth.refresh);
 
 module.exports = router;

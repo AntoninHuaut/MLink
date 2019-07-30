@@ -15,7 +15,6 @@ web.use(bodyParser.urlencoded({
     extended: true
 }));
 web.use(bodyParser.json());
-web.use(require('passport').initialize());
 
 hbs.registerPartials(__dirname + '/views/partials');
 web.engine('hbs', hbs.__express);
@@ -49,7 +48,6 @@ web.use(session({
     cookie: cookieData
 }));
 
-require('./passport');
 web.use(require("./routes"));
 
 web.listen(config.port, () => {

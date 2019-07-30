@@ -27,10 +27,17 @@ exports.selectGame = async function (req, res) {
 }
 
 exports.checkSelectGame = async function (req, res) {
-    res.render('home', {
-        user: req.session.user,
-        message: "Fonction non implémentée"
-    });
+    let callback = req.session.user.selectGameCallback;
+    if (!callback)
+        return res.redirect('/game');
+
+    let gameSelect = req.body.gameSelect;
+    let infoGame = (await sql.getInfoGame(gameSelect).catch(err => {}))[0];
+    if (!infoGame)
+        return res.redirect('/game');
+
+    req.session.user.gameSelect = gameSelect;
+    res.redirect(callback);
 }
 
 exports.createGame = async function (req, res) {
