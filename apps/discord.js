@@ -9,6 +9,8 @@ client.on('ready', () => {
 });
 
 client.on('message', async msg => {
+    if (!msg.content.startsWith(config.discord.prefix)) return;
+
     let args = msg.content.slice(config.discord.prefix.length).trim().split(/ +/g);
     let command = args.shift().toLowerCase();
 
